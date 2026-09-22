@@ -1,0 +1,6 @@
+{
+  "token": "pit-…",
+  "location_id": "",
+  "app_location_id": "",
+  "sync": {"contacts": true, "appointments": true, "invoices": false, "sms": false, "workflows": true, "opportunities": true, "email": false, "objects": false}
+}
