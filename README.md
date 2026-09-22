@@ -36,7 +36,7 @@ Create a Private Integration token in HighLevel (Settings → Private Integratio
 - copy `server/hl.config.example.json` to `server/hl.config.json` and fill in `token` and `location_id` (the sub-account id from the HighLevel URL), or
 - set `HL_TOKEN` and `HL_LOCATION_ID` in the environment of the API process.
 
-In the app open **HighLevel**, link the business, run **Sync team**, map a pipeline and workflows, then **Seed HighLevel** and **Verify**. `server/hl.config.json` is git-ignored; never commit it.
+In the app open **HighLevel**, link the business, run **Sync team**, map a pipeline and workflows, then **Seed HighLevel** and **Verify**. **Seed last 7 days** (or 14 / 30) back-fills a week of paid visits, no-shows, class check-ins, pass sales and shifts and pushes them into every switched-on tool: contacts, calendar events with their final status, workflows, opportunities, invoices with recorded payments, products and custom-object records. Nothing is texted or emailed for back-dated history. `server/hl.config.json` is git-ignored; never commit it.
 
 ## Scripts
 

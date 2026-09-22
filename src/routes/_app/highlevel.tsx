@@ -65,6 +65,7 @@ function HighLevel() {
   const [busy, setBusy] = useState<string | null>(null);
   const [failOnly, setFailOnly] = useState(false);
   const [locId, setLocId] = useState("");
+  const [histDays, setHistDays] = useState(7);
   const sid = S?.id;
   const load = () =>
     api.get<Status>(L("/hl/status")).then((h) => {
@@ -343,6 +344,45 @@ function HighLevel() {
               }
             >
               {busy === "seed" ? "Seeding…" : "Seed HighLevel"}
+            </Button>
+            <select
+              className="h-8 rounded-lg border bg-card px-2 text-[13px]"
+              value={histDays}
+              disabled={!ok || !linked}
+              onChange={(e) => setHistDays(+e.target.value)}
+              aria-label="How many past days to seed"
+            >
+              {[7, 14, 30].map((n) => (
+                <option key={n} value={n}>
+                  last {n} days
+                </option>
+              ))}
+            </select>
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={!ok || !linked || busy === "history"}
+              title="Adds paid visits, no-shows, class check-ins, pass sales and shifts for the past days, then pushes them into every HighLevel tool that is switched on. No texts or emails are sent."
+              onClick={() =>
+                run(
+                  "history",
+                  () =>
+                    api.post<{ done: Record<string, number>; pushed: Record<string, number> }>(
+                      L("/hl/seed-history"),
+                      { days: histDays },
+                    ),
+                  (r) =>
+                    r.done["appointments"]
+                      ? `Seeded ${r.done["days"]} days: ${r.done["paid"]} paid visits · ${r.done["noshows"]} no-shows · ${r.done["visits"]} class check-ins · ${r.done["passes"]} passes — HighLevel: ${
+                          Object.entries(r.pushed)
+                            .map(([k, v]) => `${v} ${k}`)
+                            .join(" · ") || "nothing switched on"
+                        }`
+                      : "Those days already have history; pick a longer range",
+                )
+              }
+            >
+              {busy === "history" ? "Seeding history…" : `Seed last ${histDays} days`}
             </Button>
           </div>
         </div>
